@@ -1,0 +1,85 @@
+version: "3"
+services:
+  mongo1:
+    hostname: mongo1
+    container_name: localmongo1
+    image: mongo:4.4-bionic
+    networks:
+      - my-net
+    ports: 
+      - "27018:27017"    
+    expose:
+      - 27017
+    restart: "no"
+    entrypoint:
+      ["/usr/bin/mongod", "--bind_ip_all", "--port", "27017", "--replSet", "rs0"]
+  mongo2:
+    hostname: mongo2
+    container_name: localmongo2
+    image: mongo:4.4-bionic
+    networks:
+      - my-net
+    ports: 
+      - "27019:27017"    
+    expose:
+      - 27017
+    restart: "no"
+    entrypoint:
+      ["/usr/bin/mongod", "--bind_ip_all", "--port", "27017", "--replSet", "rs0"]
+  mongo3:
+    hostname: mongo3
+    container_name: localmongo3
+    image: mongo:4.4-bionic
+    networks:
+      - my-net
+    ports: 
+      - "27020:27017"    
+    expose:
+      - 27017
+    restart: "no"
+    entrypoint:
+      ["/usr/bin/mongod", "--bind_ip_all", "--port", "27017", "--replSet", "rs0"]
+  mongosetup:
+    image: mongo:4.4-bionic
+    networks:
+      - my-net
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    volumes:
+      - .:/scripts
+    restart: "no"
+    entrypoint: ["bash", "/mongo_setup.sh"]
+  server:
+    container_name: server
+    build: ./api
+    links: 
+      - "mongo1:mongo1"  
+      - "mongo2:mongo2"  
+      - "mongo3:mongo3"  
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3   
+      - mongosetup  
+    ports:
+      - "3000:3000"
+    networks:
+      - my-net
+  client:
+    container_name: client
+    build: ./client
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3  
+      - server
+    networks:
+      - my-net
+
+networks:
+  my-net:
+    driver: bridge
