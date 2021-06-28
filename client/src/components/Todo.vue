@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1 :style="{ color: data.isFinish ? 'green' : 'red' }">{{ data.text }}</h1>
+    <h1 :style="{ color: data.isFinish ? 'green' : 'red' }">
+      {{ data.text }} <button @click="deleteTodo(data.id)">delete</button><button @click="checkTodo(data.id)">check/uncheck</button>
+    </h1>
   </div>
 </template>
 
@@ -9,6 +11,14 @@ export default {
   name: "Todo",
   props: {
     data: Object,
+  },
+  methods: {
+    deleteTodo(id) {
+      this.$store.dispatch("deleteTodo",id);
+    },
+    checkTodo(id){
+      this.$store.dispatch("checkTodo",id);
+    }
   },
 };
 </script>

@@ -14,7 +14,9 @@
     "dotenv": "^8.6.0",
     "pusher-js": "^7.0.3",
     "socket.io-client": "^4.1.2",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-axios": "^3.2.4",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

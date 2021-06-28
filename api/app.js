@@ -1,22 +1,25 @@
 const express = require("express");
 const logger = require("morgan");
-const routeController = require("./routeController");
+const routeController = require("./router");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
 
 const port = process.env.PORT || 3000;
 
-const uri = process.env.DB_URL || "mongodb://localhost:27017";
+app.use(cors());
+
+const uri = process.env.DB_URL || "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=rs0";
+
 
 async function dbconnect() {
-  
   await mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: true,
   });
 }
-dbconnect();
+//dbconnect();
 
 app.use(logger("dev"));
 app.use(express.json());
