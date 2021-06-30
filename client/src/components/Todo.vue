@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 :style="{ color: data.isFinish ? 'green' : 'red' }">
-      {{ data.text }} <button @click="deleteTodo(data.id)">delete</button><button @click="checkTodo(data.id)">check/uncheck</button>
+      {{ data.text }} <button @click="deleteTodo(data._id)">delete</button><button @click="checkTodo(data._id)">check/uncheck</button>
     </h1>
   </div>
 </template>

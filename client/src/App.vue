@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div>
+    <form @submit.prevent="addTodo">
       <input type="text" v-model="todo.text" />
-      <button @click="addTodo">add</button>
-    </div>
-    <Todo v-for="todo in todos" :key="todo.id" :data="todo" />
+      <button type="submit">add</button>
+    </form>
+    <Todo v-for="todo in todos" :key="todo._id" :data="todo" />
   </div>
 </template>
 
@@ -28,29 +28,16 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getTodos");
-    /*  const socket = io("http://localhost:3000");
-
-    let vm=this;
-
-    socket.on("add", function(data) {
-      vm.todos.push(data)
-    
-    });
-
-    socket.on("delete", function(data) {
-      console.log(data);
-    });
-
-    socket.on("update", function(data) {
-      console.log(data);
-    });  */
+    this.$store.dispatch("initializeSocket")
   },
   computed: {
     ...mapState(["todos"]),
   },
   methods: {
     addTodo() {
+      
       this.$store.dispatch("addTodo", this.todo);
+      this.todo.text=""
     },
   },
 };

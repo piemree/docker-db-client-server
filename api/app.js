@@ -9,17 +9,17 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-const uri = process.env.DB_URL || "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=rs0";
+const uri = process.env.DB_URL || "mongodb://localhost:2717/test?replicaSet=rs0";
 
 
 async function dbconnect() {
   await mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
   });
 }
-//dbconnect();
+dbconnect();
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -29,8 +29,8 @@ app.use(routeController);
 
 const server = app.listen(port);
 
-module.exports.server = server;
+ module.exports.server = server;
 
-require("./socket").socket();
+require("./socket").socket(); 
 
 module.exports = app;
