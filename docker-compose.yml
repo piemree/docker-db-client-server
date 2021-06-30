@@ -72,6 +72,8 @@ services:
     build: ./client
     ports:
       - "8080:8080"
+    links: 
+      - "server:server"  
     depends_on:
       - mongo1
       - mongo2

@@ -1,19 +1,22 @@
 const express = require("express");
 const logger = require("morgan");
-const routeController = require("./routeController");
+const routeController = require("./router");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
 
 const port = process.env.PORT || 3000;
 
-const uri = process.env.DB_URL || "mongodb://localhost:27017";
+app.use(cors());
+
+const uri = process.env.DB_URL || "mongodb://localhost:2717/test?replicaSet=rs0";
+
 
 async function dbconnect() {
-  
   await mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
   });
 }
 dbconnect();
@@ -26,8 +29,8 @@ app.use(routeController);
 
 const server = app.listen(port);
 
-module.exports.server = server;
+ module.exports.server = server;
 
-require("./socket").socket();
+require("./socket").socket(); 
 
 module.exports = app;

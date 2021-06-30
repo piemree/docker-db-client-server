@@ -1,14 +1,17 @@
 <template>
   <div id="app">
-    <h1>test pusher</h1>
-    <Todo v-for="todo in todos" :key="todo.id" :data="todo" />
+    <form @submit.prevent="addTodo">
+      <input type="text" v-model="todo.text" />
+      <button type="submit">add</button>
+    </form>
+    <Todo v-for="todo in todos" :key="todo._id" :data="todo" />
   </div>
 </template>
 
 <script>
 import Todo from "./components/Todo.vue";
-import { io } from "socket.io-client";
-//import axios from "axios";
+//import { io } from "socket.io-client";
+import { mapState } from "vuex";
 
 export default {
   name: "App",
@@ -17,26 +20,25 @@ export default {
   },
   data() {
     return {
-      todos: [],
+      todo: {
+        text: "",
+        isFinish: false,
+      },
     };
   },
   mounted() {
-    const socket = io("http://localhost:3000");
-
-    let vm=this;
-
-    socket.on("add", function(data) {
-      vm.todos.push(data)
-    
-    });
-
-    socket.on("delete", function(data) {
-      console.log(data);
-    });
-
-    socket.on("update", function(data) {
-      console.log(data);
-    }); 
+    this.$store.dispatch("getTodos");
+    this.$store.dispatch("initializeSocket")
+  },
+  computed: {
+    ...mapState(["todos"]),
+  },
+  methods: {
+    addTodo() {
+      
+      this.$store.dispatch("addTodo", this.todo);
+      this.todo.text=""
+    },
   },
 };
 </script>
