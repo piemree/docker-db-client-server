@@ -9,8 +9,8 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-const uri = process.env.DB_URL || "mongodb://localhost:2717/test?replicaSet=rs0";
-
+const uri =
+  process.env.DB_URL || "mongodb://localhost:2717/test?replicaSet=rs0";
 
 async function dbconnect() {
   await mongoose.connect(uri, {
@@ -29,8 +29,11 @@ app.use(routeController);
 
 const server = app.listen(port);
 
- module.exports.server = server;
+const io = require("socket.io")(server, {
+  // below are engine.IO options
+  cors: { origin: "*" },
+});
 
-require("./socket").socket(); 
+require("./socket").socket({io,mongoose});
 
 module.exports = app;

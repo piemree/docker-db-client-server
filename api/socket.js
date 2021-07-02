@@ -1,12 +1,5 @@
-const { server } = require("./app");
 const Todo = require("./database/models/Todo");
-const mongoose = require("mongoose");
-const io = require("socket.io")(server, {
-  // below are engine.IO options
-  cors: { origin: "*" },
-});
-
-function start() {
+function start({io,mongoose}) {
  
 
   io.on("connection", function (socket) {
